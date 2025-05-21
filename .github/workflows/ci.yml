@@ -1,0 +1,21 @@
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with: { python-version: '3.10' }
+      - uses: actions/setup-node@v3
+        with: { node-version: '16' }
+      - run: pip install -r backend/requirements.txt
+        working-directory: backend
+      - run: npm install
+        working-directory: src
+      - run: pytest --cov=backend/modules
+        working-directory: backend
+      - run: npm test
+        working-directory: src
+      - run: npx cypress run
+        working-directory: src
